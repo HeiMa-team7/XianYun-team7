@@ -16,7 +16,7 @@
             </div>
 
             <!-- 点赞评论分享栏 -->
-            <div>点赞.....</div>
+            <DetailCtrl :comment="comments_len" :like="post.like"/>
 
             <!-- 发表评论 -->
             <div>评论书写</div>
@@ -30,38 +30,57 @@
 </template>
 
 <script>
+// 引入组件
 import DetailAside from "@/components/post/detailAside";
+import DetailCtrl from "@/components/post/detailCtrl";
+
+// 引入转换时间格式插件
 import moment from "moment";
 export default {
     components: {
-        DetailAside
+        DetailAside,
+        DetailCtrl,
     },
     data() {
         return {
             post: {},
-            createdTime: ""
+            createdTime: "",
+            comments:{},
+            comments_len:0
         };
     },
     methods:{
+        // 获取文章详情数据
         async getPostData(){
             const { id } = this.$route.query;
             const res = await this.$axios({
                 url: "/posts/" + id
             });
-            console.log(res);
             this.post = res.data;
+            // 后台传过来时间格式不对，需要使用format进行一次转换
             this.createdTime = moment(res.data.created_at).format(
                 "YYYY-MM-DD hh:mm"
             );
         }
     },
     watch:{
+        // 监听路由变化，在点击相关推荐时，重新获取文章详情数据，页面跳转才能获得新的数据
         $route(){
             this.getPostData();
         }
     },
     mounted() {
         this.getPostData();
+        this.$axios({
+            url:'/posts/comments',
+            data:{
+                post: this.$route.query.id
+            }
+        }).then(res=>{
+            const { data } = res.data;
+            this.comments_len = res.data.total;
+            // console.log(res);
+        })
     }
 };
 </script>

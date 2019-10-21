@@ -45,7 +45,6 @@ export default {
             });
             const { data } = res.data;
             this.dataList = data;
-            console.log(data);
             data.forEach(v => {
                 let temp = moment(v.created_at).format("YYYY-MM-DD hh:mm");
                 this.createTime.push(temp);
