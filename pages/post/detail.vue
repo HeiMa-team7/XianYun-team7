@@ -31,7 +31,7 @@
 
 <script>
 import DetailAside from "@/components/post/detailAside";
-import moment from 'moment';
+import moment from "moment";
 export default {
     components: {
         DetailAside
@@ -39,22 +39,29 @@ export default {
     data() {
         return {
             post: {},
-            createdTime:''
+            createdTime: ""
         };
     },
-    mounted() {
-        const { id } = this.$route.query;
-        this.$axios({
-            url: "/posts",
-            data: {
-                id
-            }
-        }).then(res => {
+    methods:{
+        async getPostData(){
+            const { id } = this.$route.query;
+            const res = await this.$axios({
+                url: "/posts/" + id
+            });
             console.log(res);
-            const { data } = res.data;
-            this.post = data[0];
-            this.createdTime = moment(data[0].created_at).format('YYYY-MM-DD hh:mm');
-        });
+            this.post = res.data;
+            this.createdTime = moment(res.data.created_at).format(
+                "YYYY-MM-DD hh:mm"
+            );
+        }
+    },
+    watch:{
+        $route(){
+            this.getPostData();
+        }
+    },
+    mounted() {
+        this.getPostData();
     }
 };
 </script>
@@ -68,22 +75,22 @@ export default {
 
 .main {
     width: 700px;
-    .post{
-        h1{
+    .post {
+        h1 {
             padding: 20px 0;
-            border-bottom: 1px solid #ddd; 
+            border-bottom: 1px solid #ddd;
         }
-        .post_info{
+        .post_info {
             padding: 20px 0;
             color: #999;
             text-align: right;
-            span{
-                margin-left: 20px; 
+            span {
+                margin-left: 20px;
             }
         }
-        .post_content{
+        .post_content {
             line-height: 1.5;
-            /deep/ img{
+            /deep/ img {
                 max-width: 100%;
             }
         }
