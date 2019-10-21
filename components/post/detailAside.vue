@@ -42,7 +42,6 @@ export default {
                 id
             }
         }).then(res => {
-            console.log(res);
             const { data } = res.data;
             this.dataList = data;
             data.forEach(v => {
