@@ -6,13 +6,19 @@
         <!-- 推荐链接列表 -->
         <div class="recommened_list">
             <!-- 推荐链接 -->
-            <el-row type="flex" justify="space-between" class="recommened_items">
+            <el-row
+                type="flex"
+                justify="space-between"
+                class="recommened_items"
+                v-for="(item,index) in dataList"
+                :key="index"
+            >
                 <div class="item_cover">
-                    <!-- <img src="http://157.122.54.189:9095/uploads/cd5fa4aabc4243fd9f36429f0019e97c.jpg" alt=""> -->
+                    <img :src="`${item.images[0]}`" alt="">
                 </div>
                 <div class="item_content">
-                    <div class="item_title">测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试</div>
-                    <div class="item_info"> 2019-10-21 10:09 阅读 2 </div>
+                    <div class="item_title">{{item.title}}</div>
+                    <div class="item_info">{{createTime[index]}} 阅读 {{item.watch}}</div>
                 </div>
             </el-row>
         </div>
@@ -20,7 +26,32 @@
 </template>
 
 <script>
-export default {};
+import moment from 'moment';
+export default {
+    data() {
+        return {
+            dataList: [],
+            createTime:[]
+        };
+    },
+    mounted() {
+        const { id } = this.$route.query;
+        this.$axios({
+            url: "/posts/recommend",
+            data: {
+                id
+            }
+        }).then(res => {
+            console.log(res);
+            const { data } = res.data;
+            this.dataList = data;
+            data.forEach(v => {
+                let temp = moment(v.created_at).format('YYYY-MM-DD hh:mm');
+                this.createTime.push(temp)
+            });            
+        });
+    }
+};
 </script>
 
 <style scoped lang="less">
@@ -32,21 +63,26 @@ export default {};
         border-bottom: 1px solid #ddd;
     }
 
-    .recommened_list{
-        .recommened_items{
+    .recommened_list {
+        .recommened_items {
             padding: 20px 0;
             border-bottom: 1px solid #ddd;
-            .item_cover{
+            .item_cover {
                 width: 100px;
                 height: 80px;
                 background-color: #ddd;
                 overflow: hidden;
                 margin-right: 10px;
+                img{
+                    width: 100px;
+                    height: 80px;
+                    object-fit: cover;
+                }
             }
-            .item_content{
+            .item_content {
                 flex: 1;
                 position: relative;
-                .item_title{
+                .item_title {
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -55,7 +91,7 @@ export default {};
                     height: 2.8em;
                     overflow: hidden;
                 }
-                .item_info{
+                .item_info {
                     position: absolute;
                     bottom: 0;
                     left: 0;
