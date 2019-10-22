@@ -16,13 +16,15 @@
             </div>
 
             <!-- 点赞评论分享栏 -->
-            <DetailCtrl :comment="comments_len"/>
+            <DetailCtrl :comment="comments_len" />
 
             <!-- 发表评论 -->
             <div>评论书写</div>
 
             <!-- 评论展示 -->
-            <div>评论</div>
+            <div class="comments_list">
+                <CommentsItem v-for="(item,index) in comments" :key="index" class="comments_item" :data="item" />
+            </div>
         </div>
         <!-- 右侧相关攻略 -->
         <DetailAside />
@@ -33,6 +35,7 @@
 // 引入组件
 import DetailAside from "@/components/post/detailAside";
 import DetailCtrl from "@/components/post/detailCtrl";
+import CommentsItem from "@/components/post/commentsItem";
 
 // 引入转换时间格式插件
 import moment from "moment";
@@ -40,18 +43,19 @@ export default {
     components: {
         DetailAside,
         DetailCtrl,
+        CommentsItem
     },
     data() {
         return {
             post: {},
             createdTime: "",
-            comments:{},
-            comments_len:0
+            comments: [],
+            comments_len: 0
         };
     },
-    methods:{
+    methods: {
         // 获取文章详情数据
-        async getPostData(){
+        async getPostData() {
             const { id } = this.$route.query;
             const res = await this.$axios({
                 url: "/posts/" + id
@@ -63,24 +67,26 @@ export default {
             );
         }
     },
-    watch:{
+    watch: {
         // 监听路由变化，在点击相关推荐时，重新获取文章详情数据，页面跳转才能获得新的数据
-        $route(){
+        $route() {
             this.getPostData();
         }
     },
     mounted() {
         this.getPostData();
+        // 发送请求获得评论数据
         this.$axios({
-            url:'/posts/comments',
-            data:{
+            url: "/posts/comments",
+            data: {
                 post: this.$route.query.id
             }
-        }).then(res=>{
+        }).then(res => {
             const { data } = res.data;
+            this.comments = data;
             this.comments_len = res.data.total;
-            // console.log(res);
-        })
+            console.log(data);
+        });
     }
 };
 </script>
@@ -111,6 +117,15 @@ export default {
             line-height: 1.5;
             /deep/ img {
                 max-width: 100%;
+            }
+        }
+    }
+    .comments_list {
+        border: 1px solid #ddd;
+        .comments_item{
+            border-bottom: 1px dashed #ddd;
+            &:last-child{
+                border-bottom: none;
             }
         }
     }
