@@ -89,8 +89,10 @@ export default {
       url: "/cities?name=" + this.cityName
     }).then(res => {
       const { data } = res.data;
+      console.log(data);
+      
       this.cities = data[0];
-      console.log(this.cities);
+      // console.log(this.cities);
     });
   },
 
@@ -104,16 +106,17 @@ export default {
       }
 
       this.$axios({
-        url: "/airs/city?name=" + value
+        url: "/cities?name=" + value
       }).then(res => {
         // data是后台返回的城市数组,没有value属性
         const { data } = res.data;
-        // 循环给每一项添加value属性
+        // // 循环给每一项添加value属性
         const newData = data.map(v => {
-          //   v.value = v.name.replace("市", "");
           v.value = v.name;
           return v;
         });
+        console.log(newData);
+        
         this.cityData = newData;
         // 展示到下拉列表
         cb(newData);
@@ -121,6 +124,7 @@ export default {
     },
 
     // 当选中下拉框中的选项后触发
+    // 应该发送请求，将对应的城市信息请求回来
     handleSelect() {
       console.log(123);
     }

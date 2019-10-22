@@ -14,7 +14,6 @@
             <i class="el-icon-caret-top" v-else></i>
             等{{cities.scenics.length}}个区域
           </p>
-          
         </div>
       </div>
 
@@ -31,34 +30,40 @@
         <span>攻略:</span>
         <div class="star_level">
           <!-- 均价评分 -->
-          <i>均价：</i>
-          <el-rate
-            v-model="starLevel1"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}"
-          ></el-rate>
+          <div>
+            <p>均价：</p>
+            <el-rate
+              v-model="starLevel1"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+            ></el-rate>
+          </div>
 
           <!-- 设施等级评级 -->
-          <i>设施:</i>
-          <el-rate
-            v-model="starLevel2"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}"
-          ></el-rate>
+          <div>
+            <p>设施:</p>
+            <el-rate
+              v-model="starLevel2"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+            ></el-rate>
+          </div>
 
           <!-- 服务等级评级 -->
-          <i>服务:</i>
-          <el-rate
-            v-model="starLevel3"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}"
-          ></el-rate>
+          <div>
+            <p>服务:</p>
+            <el-rate
+              v-model="starLevel3"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+            ></el-rate>
+          </div>
         </div>
       </div>
     </div>
@@ -78,8 +83,8 @@ export default {
   props: {
     cities: {
       type: Object,
-      default:{
-        scenics: [],
+      default: {
+        scenics: []
       }
     }
   },
@@ -174,7 +179,13 @@ export default {
     }
   }
 }
+.star_level {
+  display: flex;
 
+  >div {
+    margin-right: 30px;
+  }
+}
 .visited {
   color: #999;
   background-color: #eee;
