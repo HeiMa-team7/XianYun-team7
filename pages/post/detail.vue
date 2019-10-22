@@ -22,8 +22,26 @@
             <div>评论书写</div>
 
             <!-- 评论展示 -->
-            <div class="comments_list">
-                <CommentsItem v-for="(item,index) in comments" :key="index" class="comments_item" :data="item" />
+            <div class="comments" v-if="comments_len!=0">
+                <div class="comments_list">
+                    <CommentsItem
+                        v-for="(item,index) in comments"
+                        :key="index"
+                        class="comments_item"
+                        :data="item"
+                    />
+                </div>
+                <!-- 评论的分页组件 -->
+                <el-pagination
+                    class="setpage"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageIndex"
+                    :page-sizes="[2, 4, 6, 8]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="comments_len"
+                ></el-pagination>
             </div>
         </div>
         <!-- 右侧相关攻略 -->
@@ -50,7 +68,9 @@ export default {
             post: {},
             createdTime: "",
             comments: [],
-            comments_len: 0
+            comments_len: 0,
+            pageIndex: 1,
+            pageSize: 2
         };
     },
     methods: {
@@ -65,6 +85,25 @@ export default {
             this.createdTime = moment(res.data.created_at).format(
                 "YYYY-MM-DD hh:mm"
             );
+        },
+        handleSizeChange(val) {
+            this.pageSize = val;
+            this.getCommentsData()
+        },
+        handleCurrentChange(val) {
+            this.pageIndex = val;
+            this.getCommentsData();
+        },
+        getCommentsData() {
+            const id = this.$route.query.id;
+            const start = (this.pageIndex-1)*this.pageSize
+            this.$axios({
+                url: `/posts/comments?post=${id}&_start=${start}&_limit=${this.pageSize}`,
+            }).then(res => {
+                console.log(res.data);
+                const { data } = res.data;
+                this.comments = data;
+            });
         }
     },
     watch: {
@@ -75,18 +114,13 @@ export default {
     },
     mounted() {
         this.getPostData();
-        // 发送请求获得评论数据
+        // 发送请求获得评论数据长度
         this.$axios({
-            url: "/posts/comments",
-            data: {
-                post: this.$route.query.id
-            }
+            url: `/posts/comments?post=${this.$route.query.id}`
         }).then(res => {
-            const { data } = res.data;
-            this.comments = data;
             this.comments_len = res.data.total;
-            console.log(data);
         });
+        this.getCommentsData();
     }
 };
 </script>
@@ -122,12 +156,15 @@ export default {
     }
     .comments_list {
         border: 1px solid #ddd;
-        .comments_item{
+        .comments_item {
             border-bottom: 1px dashed #ddd;
-            &:last-child{
+            &:last-child {
                 border-bottom: none;
             }
         }
+    }
+    /deep/.setpage{
+        margin: 10px auto 20px;
     }
 }
 

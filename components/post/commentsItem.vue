@@ -10,13 +10,15 @@
             <span>{{data.level}}</span>
         </div>
 
-        <!-- 回复的评论 -->
-        <CommentsFloor v-if="data.parent" :data="data.parent" />
+        <div class="content">
+            <!-- 回复的评论 -->
+            <CommentsFloor v-if="data.parent" :data="data.parent" />
 
-        <div class="content_wrap">
-            <div class="comments_content">{{data.content}}</div>
-            <div class="reply">
-                <a href="javascript:;">回复</a>
+            <div class="content_wrap">
+                <div class="comments_content">{{data.content}}</div>
+                <div class="reply">
+                    <a href="javascript:;">回复</a>
+                </div>
             </div>
         </div>
     </div>
@@ -67,6 +69,10 @@ export default {
     }
     .comments_content {
         margin-top: 10px;
+    }
+
+    .content {
+        padding-left: 30px;
     }
 
     .reply {
