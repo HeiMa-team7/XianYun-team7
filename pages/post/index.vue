@@ -3,170 +3,7 @@
         <!-- 左边栏 -->
         <div class="left-sideBar">
             <!-- 菜单 -->
-            <div class="menu">
-                <div class="menu-bar">
-                    <div class="menu-item" data-index="0"><p>热门城市</p><i class="el-icon-arrow-right"></i></div>
-                    <div class="menu-item" data-index="1"><p>推荐城市</p><i class="el-icon-arrow-right"></i></div>
-                    <div class="menu-item" data-index="2"><p>奔向海岛</p><i class="el-icon-arrow-right"></i></div>
-                    <div class="menu-item" data-index="3"><p>主题推荐</p><i class="el-icon-arrow-right"></i></div>
-                </div>
-                <div class="menu-sub" v-if="false">
-                    <ul>
-                        <li>
-                            <a href="#">
-                                <i>1</i>
-                                <strong>北京</strong>
-                                <span>世界著名古都和现代化国际城市</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>2</i>
-                                <strong>广州</strong>
-                                <span>粤港澳大湾区、泛珠江三角洲经济区</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>3</i>
-                                <strong>上海</strong>
-                                <span>长江入海口，东隔东中国海</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>4</i>
-                                <strong>成都</strong>
-                                <span>国家历史文化名城</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>5</i>
-                                <strong>西安</strong>
-                                <span>中国国际形象最佳城市之一</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="menu-sub" v-if="true">
-                    <ul>
-                        <li>
-                            <a href="#">
-                                <i>1</i>
-                                <strong>青岛</strong>
-                                <span>滨海度假旅游城市</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>2</i>
-                                <strong>杭州</strong>
-                                <span>西湖十景</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>3</i>
-                                <strong>深圳</strong>
-                                <span>世界影响力的创新创意之都</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>4</i>
-                                <strong>广州</strong>
-                                <span>粤港澳大湾区、泛珠江三角洲经济区</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>5</i>
-                                <strong>成都</strong>
-                                <span>国家历史文化名城</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="menu-sub" v-if="false">
-                    <ul>
-                        <li>
-                            <a href="#">
-                                <i>1</i>
-                                <strong>秦皇岛</strong>
-                                <span>驰名中外的旅游休闲胜地</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>2</i>
-                                <strong>青岛</strong>
-                                <span>滨海度假旅游城市</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>3</i>
-                                <strong>珠海</strong>
-                                <span>浪漫之城，百岛之市</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>4</i>
-                                <strong>深圳</strong>
-                                <span>世界影响力的创新创意之都</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>5</i>
-                                <strong>海口</strong>
-                                <span>海滨自然旖旎风光</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="menu-sub" v-if="false">
-                    <ul>
-                        <li>
-                            <a href="#">
-                                <i>1</i>
-                                <strong>海口</strong>
-                                <span>海滨自然旖旎风光</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>2</i>
-                                <strong>广州</strong>
-                                <span>粤港澳大湾区、泛珠江三角洲经济区</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>3</i>
-                                <strong>上海</strong>
-                                <span>长江入海口，东隔东中国海</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>4</i>
-                                <strong>珠海</strong>
-                                <span>浪漫之城，百岛之市</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i>5</i>
-                                <strong>西安</strong>
-                                <span>中国国际形象最佳城市之一</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <Menu @getCities="getCities"/>
             <!-- 推荐城市选项 -->
             <div class="recommend-city">
                 <span>推荐城市</span>
@@ -264,24 +101,33 @@
 </template>
 
 <script>
-
+// 引入组件
+import Menu from '@/components/post/menu'
 export default {
+    data() {
+        return {
+            currentPage1: 5,
+            currentPage2: 5,
+            currentPage3: 5,
+            currentPage4: 4,
+            cities:''
+        };
+    },
+    components:{
+        Menu
+    },
     methods: {
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            getCities(cities){
+                this.cities = cities
+                console.log(this.cities)
+            }
         },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-        }
-        },
-        data() {
-            return {
-                currentPage1: 5,
-                currentPage2: 5,
-                currentPage3: 5,
-                currentPage4: 4
-            };
-        }
     }
 </script>
 
@@ -292,75 +138,8 @@ export default {
     padding: 20px 0;
     display: flex;
     justify-content: space-between;
-    .active{
-        border-right-color: #fff;
-        color: orange;
-    }
     .left-sideBar{
         width: 260px;
-        .menu{
-            position: relative;
-            width: 260px;
-            z-index: 2;
-            .menu-bar{
-                position: relative;
-
-                .menu-item{
-                    display: flex;
-                    justify-content: space-between;
-                    padding: 0 20px;
-                    box-sizing: border-box;
-                    border-collapse: collapse;
-                    height: 40px;
-                    line-height: 40px;
-                    border: 1px solid #ddd;
-                    p{
-                        font-size: 14px;
-                    }
-                    &:nth-child(1),&:nth-child(2),&:nth-child(3){
-                        border-bottom: none;
-                    }
-                    i{
-                        font-size: 20px;
-                        height: 40px;
-                        line-height: 40px;
-                        color: #ccc;
-                    }
-                }
-            }
-            .menu-sub{
-                position: absolute;
-                z-index: 1;
-                left: 259px;
-                top: 0;
-                width: 350px;
-                padding: 10px 20px;
-                box-sizing: border-box;
-                background: #fff;
-                border: 1px solid #ddd;
-                vertical-align: middle;
-                ul{
-                    li{
-                        font-size: 14px;
-                        a{
-                            i{
-                                color: orange;
-                                font-size: 24px;
-                                font-style: italic;
-                            }
-                            strong{
-                                margin: 0 10px;
-                                color: orange;
-                                font-weight: 400;
-                            }
-                            span{
-                                color: #999;
-                            }
-                        }
-                    }
-                }
-            }
-        }
         .recommend-city{
             span{
                 display: block;
