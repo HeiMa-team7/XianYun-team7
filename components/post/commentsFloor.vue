@@ -8,6 +8,16 @@
                 <span>{{data.level}}</span>
             </div>
             <div class="comments_content">{{data.content}}</div>
+            <el-row type="flex" class="content_img">
+                <div v-if="data.pics">
+                    <img
+                        v-for="(item,index) in data.pics"
+                        :key="index"
+                        :src="`${$axios.defaults.baseURL + item.url}`"
+                        alt
+                    />
+                </div>
+            </el-row>
             <div class="reply">
                 <a href="javascript:;">回复</a>
             </div>
@@ -69,6 +79,21 @@ export default {
         }
         .comments_content {
             margin-top: 10px;
+        }
+
+        .content_img {
+            div {
+                width: 80px;
+                height: 80px;
+                margin: 10px 5px 0 0;
+                padding: 5px;
+                border: 1px dashed #ddd;
+                border-radius: 5px;
+                img {
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
         }
 
         .reply {

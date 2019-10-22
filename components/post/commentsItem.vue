@@ -16,6 +16,16 @@
 
             <div class="content_wrap">
                 <div class="comments_content">{{data.content}}</div>
+                <el-row type="flex" class="content_img">
+                    <div v-if="data.pics">
+                        <img
+                            v-for="(item,index) in data.pics"
+                            :key="index"
+                            :src="`${$axios.defaults.baseURL + item.url}`"
+                            alt
+                        />
+                    </div>
+                </el-row>
                 <div class="reply">
                     <a href="javascript:;">回复</a>
                 </div>
@@ -41,6 +51,7 @@ export default {
         };
     },
     mounted() {
+        // 将时间格按格式转换
         this.comment_time = moment(this.data.updated_at).format(
             "YYYY-MM-DD hh:mm"
         );
@@ -73,6 +84,21 @@ export default {
 
     .content {
         padding-left: 30px;
+    }
+
+    .content_img {
+        div {
+            width: 80px;
+            height: 80px;
+            margin: 10px 5px 0 0;
+            padding: 5px;
+            border: 1px dashed #ddd;
+            border-radius: 5px;
+            img {
+                width: 100%;
+                object-fit: cover;
+            }
+        }
     }
 
     .reply {
