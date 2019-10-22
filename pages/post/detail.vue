@@ -16,7 +16,7 @@
             </div>
 
             <!-- 点赞评论分享栏 -->
-            <DetailCtrl :comment="comments_len" :like="post.like"/>
+            <DetailCtrl :comment="comments_len"/>
 
             <!-- 发表评论 -->
             <div>评论书写</div>
