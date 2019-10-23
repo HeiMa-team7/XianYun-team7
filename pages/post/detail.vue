@@ -3,7 +3,7 @@
         <!-- 左侧文章详情 -->
         <div class="main">
             <!-- 文章顶部面包屑位置 -->
-            <div>面包屑</div>
+            <Breadcrumb :router_data="router" />
 
             <!-- 文章详情 -->
             <div class="post">
@@ -92,6 +92,7 @@
 import DetailAside from "@/components/post/detailAside";
 import DetailCtrl from "@/components/post/detailCtrl";
 import CommentsItem from "@/components/post/commentsItem";
+import Breadcrumb from "@/components/breadcrumb";
 
 // 引入转换时间格式插件
 import moment from "moment";
@@ -99,7 +100,8 @@ export default {
     components: {
         DetailAside,
         DetailCtrl,
-        CommentsItem
+        CommentsItem,
+        Breadcrumb
     },
     data() {
         return {
@@ -116,7 +118,26 @@ export default {
             reply: {
                 account: {}
             }, //回复的评论的数据
-            isReply: false //控制回复用户tag标签的显示
+            isReply: false, //控制回复用户tag标签的显示
+            router: {
+                meta: {
+                    title: "攻略详情"
+                },
+                path: "/post/detail",
+                parent: {
+                    meta: {
+                        title: "旅游攻略"
+                    },
+                    path: "/post",
+                    parent: {
+                        exist: false,
+                        meta: {
+                            title: ""
+                        },
+                        path: "/"
+                    }
+                }
+            } //面包屑数据
         };
     },
     methods: {
