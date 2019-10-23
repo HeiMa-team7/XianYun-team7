@@ -7,11 +7,11 @@
             <!-- 推荐城市选项 -->
             <div class="recommend-city">
                 <span>推荐城市</span>
-                <a href="#"><img src="" alt=""></a>
+                <a href="#"><img src="@/static/pic_sea.jpeg" alt=""></a>
             </div>
         </div>
         <!-- 右边栏 -->
-        <RightContent/>
+        <RightContent :menuInfo='cities'/>
     </div>
 </template>
 

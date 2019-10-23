@@ -2,7 +2,7 @@
 <div class="right-content">
     <!-- 搜索栏 -->
     <div class="search-bar">
-        <input type="text" placeholder="请输入想去的地方,比如:'广州'">
+        <input type="text" placeholder="请输入想去的地方,比如:'广州'" @keydown.enter="handleSearch">
         <i class="el-icon-search"></i>
     </div>
     <!-- 推荐搜索 -->
@@ -19,7 +19,7 @@
     </div>
     <!-- 卡片栏 -->
     <div class="post-item"
-    v-for="(item,index) in data"
+    v-for="(item,index) in post"
     :key="index"
     v-if="item.images.length>1"
     >
@@ -39,9 +39,9 @@
                 <div class="post-user">
                     by 
                     <a href="#">
-                        <img src="" alt="">
-                        <span>地球发动机</span>
+                        <img src="@/static/avatar.jpg" alt="">
                     </a>
+                    <a href="#">地球发动机</a>
                 </div>
                 <span class="viewed">
                     <i class="el-icon-view"></i>
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="post-item-l"
-    v-for="(item,index) in data"
+    v-for="(item,index) in post"
     :key="index"
     v-if="item.images.length===1">
         <div class="post-cov">
@@ -71,9 +71,9 @@
                     <div class="post-user">
                         by 
                         <a href="#">
-                            <img src="" alt="">
-                            <span>地球发动机</span>
+                            <img src="@/static/avatar.jpg" alt="">
                         </a>
+                        <a href="#">地球发动机</a>
                     </div>
                     <span class="viewed">
                         <i class="el-icon-view"></i>
@@ -107,9 +107,10 @@ export default {
             currentPage2: 5,
             currentPage3: 5,
             currentPage4: 4,
-            data:[]
+            post:[]
         }
     },
+    props:['menuInfo'],
     methods:{
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
@@ -117,14 +118,37 @@ export default {
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
         },
+        handleSearch(event){
+            let value =  event.target.value 
+            if(value){
+                this.$axios({
+                    url:`/posts?city=${value}`
+                }).then(res=>{
+                    this.post = res.data.data
+                })
+            }else{
+                this.handleLink()
+            }
+        },
+        handleLink(){
+            this.$axios({
+                url:'/posts/recommend'
+            }).then(res=>{
+                this.post = res.data.data
+            })
+        }
+    },
+    watch:{
+        menuInfo(){
+            this.$axios({
+                url:`/posts?city=${this.menuInfo}`
+            }).then(res=>{
+                this.post = res.data.data
+            })
+        }
     },
     mounted(){
-        this.$axios({
-            url:'/posts/recommend'
-        }).then(res=>{
-            console.log(res);
-            this.data = res.data.data
-        })
+        this.handleLink()
     }
 }
 </script>
@@ -247,17 +271,16 @@ export default {
             .post-user{
                 display: inline-block;
                 margin-right: 10px;
-                text-align: center;
+                align-items: center;
                 img{
                     width: 16px;
                     height: 16px;
-                    display: inline-block;
                     border-radius: 50%;
                     margin: 5px;
                     box-sizing: border-box;
                     vertical-align: middle;
                 }
-                span{
+                a{
                     color: orange;
                 }
             }
