@@ -2,7 +2,7 @@
 <div class="right-content">
     <!-- 搜索栏 -->
     <div class="search-bar">
-        <input type="text" placeholder="请输入想去的地方,比如:'广州'" @keydown.enter="handleSearch">
+        <input type="text" placeholder="请输入想去的地方,比如:'广州'" @keydown.enter="handleSearchCity">
         <i class="el-icon-search"></i>
     </div>
     <!-- 推荐搜索 -->
@@ -19,7 +19,7 @@
     </div>
     <!-- 卡片栏 -->
     <div class="post-item"
-    v-for="(item,index) in post"
+    v-for="(item,index) in postData"
     :key="index"
     v-if="item.images.length>1"
     >
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="post-item-l"
-    v-for="(item,index) in post"
+    v-for="(item,index) in postData"
     :key="index"
     v-if="item.images.length===1">
         <div class="post-cov">
@@ -89,11 +89,11 @@
         <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="pageIndex"
+        :page-sizes="[1, 2, 3, 4]"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :total="total">
         </el-pagination>
     </div>
 </div>
@@ -103,29 +103,34 @@
 export default {
     data(){
         return{
-            currentPage1: 5,
-            currentPage2: 5,
-            currentPage3: 5,
-            currentPage4: 4,
-            post:[]
+            pageIndex:1,
+            pageSize:1,
+            post:[],
+            postData:[],
+            total:0
         }
     },
     props:['menuInfo'],
     methods:{
         handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
+            this.pageSize = val
+            this.postData = this.post.slice(
+                0,
+                this.pageIndex*this.pageSize
+            )
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            this.pageIndex = val
+            this.postData = this.post.slice(
+                (this.pageIndex-1)*this.pageSize,
+                this.pageIndex*this.pageSize
+            )
         },
-        handleSearch(event){
+        handleSearchCity(event){
             let value =  event.target.value 
+            console.log(value);
             if(value){
-                this.$axios({
-                    url:`/posts?city=${value}`
-                }).then(res=>{
-                    this.post = res.data.data
-                })
+                this.handleSearch(value)
             }else{
                 this.handleLink()
             }
@@ -135,16 +140,23 @@ export default {
                 url:'/posts/recommend'
             }).then(res=>{
                 this.post = res.data.data
+                this.total = this.post.length
+                this.postData = this.post.slice((this.pageIndex-1)*this.pageSize,this.pageSize)
+            })
+        },
+        handleSearch(menuInfo){
+            this.$axios({
+                url:`/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}&city=${menuInfo}`
+            }).then(res=>{
+                const {data} = res.data
+                this.total = res.data.total
+                this.postData = res.data.data
             })
         }
     },
     watch:{
         menuInfo(){
-            this.$axios({
-                url:`/posts?city=${this.menuInfo}`
-            }).then(res=>{
-                this.post = res.data.data
-            })
+            this.handleSearch(this.menuInfo)
         }
     },
     mounted(){
