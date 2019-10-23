@@ -12,12 +12,12 @@
 
         <div class="content">
             <!-- 回复的评论 -->
-            <CommentsFloor v-if="data.parent" :data="data.parent" />
+            <CommentsFloor v-if="data.parent" :data="data.parent" @handleReply="handleReply" />
 
             <div class="content_wrap">
                 <div class="comments_content">{{data.content}}</div>
                 <el-row type="flex" class="content_img">
-                    <div v-if="data.pics">
+                    <div v-if="data.pics.length!==0">
                         <img
                             v-for="(item,index) in data.pics"
                             :key="index"
@@ -27,7 +27,7 @@
                     </div>
                 </el-row>
                 <div class="reply">
-                    <a href="javascript:;">回复</a>
+                    <a href="javascript:;" @click="handleReply(data)">回复</a>
                 </div>
             </div>
         </div>
@@ -49,6 +49,11 @@ export default {
         return {
             comment_time: ""
         };
+    },
+    methods:{
+        handleReply(data){
+            this.$emit('handleReply',data);
+        }
     },
     mounted() {
         // 将时间格按格式转换
@@ -96,6 +101,7 @@ export default {
             border-radius: 5px;
             img {
                 width: 100%;
+                height: 100%;;
                 object-fit: cover;
             }
         }

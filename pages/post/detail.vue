@@ -21,17 +21,25 @@
             <!-- 发表评论 -->
             <div class="comments_input">
                 <h4>评论</h4>
+                <!-- 回复时显示回复的用户名 -->
+                <el-tag
+                    v-if="isReply"
+                    :key="reply.account.nickname"
+                    closable
+                    type="info"
+                    @close="handleRemoveReply"
+                >{{reply.account.nickname}}</el-tag>
                 <!-- 文本框组件 -->
                 <el-input
                     resize="none"
                     type="textarea"
                     :rows="2"
-                    :placeholder="placeholder"
+                    ref="textarea"
+                    placeholder="说点什么吧..."
                     v-model="content"
                 ></el-input>
-
+                <!-- 上传照片组件 -->
                 <el-row type="flex" justify="space-between">
-                    <!-- 上传照片组件 -->
                     <el-upload
                         :action="`${$axios.defaults.baseURL}/upload`"
                         name="files"
@@ -58,6 +66,7 @@
                         :key="index"
                         class="comments_item"
                         :data="item"
+                        @handleReply="handleReply"
                     />
                 </div>
                 <!-- 评论的分页组件 -->
@@ -101,10 +110,13 @@ export default {
             pageIndex: 1, // 分页数据：当前页索引
             pageSize: 2, // 分页数据：每页数据条数
             content: "", // 评论文本框输入文本内容
-            placeholder: "说点什么吧...", // 文本框内提示信息
-            dialogImageUrl: "", //
-            dialogVisible: false, //
-            pics: []
+            dialogImageUrl: "",
+            dialogVisible: false, //文件上传需要的变量
+            pics: [], //收集评论上传的图片的数组
+            reply: {
+                account: {}
+            }, //回复的评论的数据
+            isReply: false //控制回复用户tag标签的显示
         };
     },
     methods: {
@@ -138,6 +150,7 @@ export default {
             }).then(res => {
                 const { data } = res.data;
                 this.comments = data;
+                this.comments_len = res.data.total;
             });
         },
         // 评论图片上传组件的方法
@@ -160,6 +173,10 @@ export default {
                 pics: this.pics,
                 post: this.$route.query.id
             };
+            // 回复的评论要多一个回复的评论的id
+            if (this.isReply === true) {
+                form.follow = this.reply.id;
+            }
             // 发起提交评论请求
             this.$axios({
                 url: "/comments",
@@ -169,15 +186,32 @@ export default {
                 },
                 data: form
             }).then(res => {
-                console.log(res);
                 const data = res.data;
                 if (data.status === 0) {
                     this.$message.success(data.message);
+                    // 初始化评论输入框
                     this.content = "";
                     this.$refs.upload.clearFiles();
+                    this.isReply = false;
+                    // 刷新评论数据
                     this.getCommentsData();
                 }
             });
+        },
+        // 回复评论，接收子组件传递的参数
+        handleReply(data) {
+            this.reply = data;
+            this.isReply = true;
+            // 获取评论输入框焦点
+            this.$refs.textarea.focus();
+        },
+        // 关闭回复tag标签
+        handleRemoveReply() {
+            // 清除回复数据
+            this.reply = {
+                account: {}
+            };
+            this.isReply = false;
         }
     },
     watch: {
@@ -187,13 +221,9 @@ export default {
         }
     },
     mounted() {
+        // 获取文章详情数据
         this.getPostData();
-        // 发送请求获得评论数据长度
-        this.$axios({
-            url: `/posts/comments?post=${this.$route.query.id}`
-        }).then(res => {
-            this.comments_len = res.data.total;
-        });
+        // 获取文章评论数据
         this.getCommentsData();
     }
 };
@@ -246,6 +276,10 @@ export default {
             font-size: 18px;
             font-weight: 400;
             margin-bottom: 20px;
+        }
+
+        .el-tag {
+            margin-bottom: 10px;
         }
         /deep/ textarea {
             padding: 5px 15px;
