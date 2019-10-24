@@ -236,9 +236,10 @@ export default {
         }
     },
     watch: {
-        // 监听路由变化，在点击相关推荐时，重新获取文章详情数据，页面跳转才能获得新的数据
+        // 监听路由变化，在点击相关推荐时，只重新获取文章详情数据会导致收藏点赞等数据没有刷新，改为刷新页面
         $route() {
-            this.getPostData();
+            // this.getPostData();
+            location.reload();
         }
     },
     mounted() {

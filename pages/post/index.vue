@@ -20,6 +20,7 @@
 import Menu from '@/components/post/menu'
 import RightContent from '@/components/post/rightContent'
 export default {
+    name:'post',
     data() {
         return {
             cities:''//接收子组件传过来的参数,默认为空

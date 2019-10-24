@@ -51,11 +51,12 @@ export default {
             });
         }
     },
-    watch:{
-        $route(){
-            this.getRecommened();
-        }
-    },
+    // watch:{
+    //     $route(){
+    //         // this.getRecommened();
+    //         location.reload();
+    //     }
+    // },
     mounted() {
         this.getRecommened();
     }

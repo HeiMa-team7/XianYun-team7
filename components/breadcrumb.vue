@@ -32,11 +32,6 @@ export default {
             }
         };
     },
-    mounted() {
-        this.router = this.router_data;
-        console.log(this.$route);
-        
-    }
 };
 </script>
 

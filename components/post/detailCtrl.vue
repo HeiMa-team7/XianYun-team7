@@ -69,7 +69,7 @@ export default {
                     this.isStar = true;
                 }
             });
-            let u_id = res.data.account.id
+            let u_id = res.data.account.id;
             res.data.likeIds.forEach(v => {
                 if(v === u_id){
                     this.isLike = true;
