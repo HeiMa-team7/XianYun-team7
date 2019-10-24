@@ -123,12 +123,24 @@ export default {
       this.form.enterTime = moment(this.scopeTime[0]).format("YYYY-MM-DD");
       this.form.leftTime = moment(this.scopeTime[1]).format("YYYY-MM-DD");
       //   console.log(start,end);
+    },
+
+    $route: {
+      handler: function(val, oldVal) {
+        if (this.$route.query.city) {
+          this.form.purposeCity = this.$route.query.city;
+        }
+      },
+      // 深度观察监听
+      deep: true
     }
   },
   mounted() {
-    if (this.$route.query.city) {
-      this.form.purposeCity = this.$route.query.city;
-    }
+    // console.log(this.$route.query.city);
+
+    // if (this.$route.query.city) {
+    //   this.form.purposeCity = this.$route.query.city;
+    // }
 
     // 默认加载南京市
     this.$axios({
