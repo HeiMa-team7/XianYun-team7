@@ -15,33 +15,42 @@
     <!-- 标题栏 -->
     <div class="post-title">
         <h4>推荐攻略</h4>
-        <button class="btn"><i class="el-icon-edit"></i><span>写游记</span></button>
+        <nuxt-link to="/post/create">
+            <button class="btn"><i class="el-icon-edit"></i><span>写游记</span></button>
+        </nuxt-link>
     </div>
     <!-- 卡片栏 -->
+    <!-- 当图片的张数大于一张时 -->
     <div class="post-item"
     v-for="(item,index) in postData"
     :key="index"
     v-if="item.images.length>1"
     >
-        <h4><a href="#">{{item.title}}</a></h4>
-        <p v-html="`${item.content}`"></p>
+        <nuxt-link :to="`/post/detail?id=${item.id}`">
+            <h4><nuxt-link :to="`/post/detail?id=${item.id}`">{{item.title}}</nuxt-link></h4>
+        </nuxt-link>
+        <nuxt-link :to="`/post/detail?id=${item.id}`"><p v-html="`${item.content}`"></p></nuxt-link>
         <div class="card-img">
-            <a href="#"
+            <!-- 循环遍历数据下的images数组 -->
+            <!-- 如果图片大于三张以上,超过三张的图片不显示 -->
+            <nuxt-link :to="`/post/detail?id=${item.id}`">
+            <a href="javascript:;"
             v-for="(item,index) in item.images"
             :key="index"
             v-if="index<3">
-            <img :src="`${item}`" alt="">
+                <img :src="`${item}`" alt="">
             </a>
+            </nuxt-link>
         </div>
         <div class="post-info">
             <div class="post-info-left">
                 <span class="location"><i class="el-icon-location-outline"></i>{{item.cityName}}</span>
                 <div class="post-user">
                     by 
-                    <a href="#">
+                    <a href="/user/personal">
                         <img src="@/static/avatar.jpg" alt="">
                     </a>
-                    <a href="#">地球发动机</a>
+                    <a href="/user/personal">地球发动机</a>
                 </div>
                 <span class="viewed">
                     <i class="el-icon-view"></i>
@@ -51,29 +60,28 @@
             <div class="post-info-right">54 赞</div>
         </div>
     </div>
+    <!-- 当图片只有一张的时候的卡片样式 -->
     <div class="post-item-l"
     v-for="(item,index) in postData"
     :key="index"
     v-if="item.images.length===1">
         <div class="post-cov">
-            <a href="#"
-            v-for="(item,index) in item.images"
-            :key="index">
-                <img :src="`${item}`" alt="">
-            </a>
+            <nuxt-link :to="`/post/detail?id=${item.id}`">
+                <img :src="`${item.images[0]}`" alt="">
+            </nuxt-link>
         </div>
         <div class="post-content">
-            <h4><a href="#">{{item.title}}</a></h4>
-            <p v-html="`${item.content}`"></p>
+            <h4><nuxt-link :to="`/post/detail?id=${item.id}`">{{item.title}}</nuxt-link></h4>
+            <nuxt-link :to="`/post/detail?id=${item.id}`"><p v-html="`${item.content}`"></p></nuxt-link>
             <div class="post-info">
                 <div class="post-info-left">
                     <span class="location"><i class="el-icon-location-outline"></i>{{item.cityName}}</span>
                     <div class="post-user">
                         by 
-                        <a href="#">
+                        <a href="/user/personal">
                             <img src="@/static/avatar.jpg" alt="">
                         </a>
-                        <a href="#">地球发动机</a>
+                        <a href="/user/personal">地球发动机</a>
                     </div>
                     <span class="viewed">
                         <i class="el-icon-view"></i>
@@ -103,64 +111,68 @@
 export default {
     data(){
         return{
-            pageIndex:1,
-            pageSize:1,
-            post:[],
-            postData:[],
-            total:0
+            pageIndex:1,//分页参数
+            pageSize:1,//每页条数
+            post:[],//请求数据的总集合
+            postData:[],//分页后数据集合
+            total:0//后台文章总数
         }
     },
-    props:['menuInfo'],
+    props:['menuInfo'],//从首页传过来的推荐菜单city名字
     methods:{
+        // 当选择分页条数时触发
         handleSizeChange(val) {
-            this.pageSize = val
-            this.postData = this.post.slice(
-                0,
-                this.pageIndex*this.pageSize
-            )
+            this.pageSize = val;
+            this.pageIndex = 1;
+            this.handleLink(this.pageIndex,this.pageSize);
         },
+        //当切换页数时触发
         handleCurrentChange(val) {
-            this.pageIndex = val
-            this.postData = this.post.slice(
-                (this.pageIndex-1)*this.pageSize,
-                this.pageIndex*this.pageSize
-            )
+            this.pageIndex = val;
+            this.handleLink(this.pageIndex,this.pageSize);
         },
+        // 当选择推荐城市或者搜索城市触发
         handleSearchCity(event){
-            let value =  event.target.value 
+            let value =  event.target.value ;
             console.log(value);
             if(value){
-                this.handleSearch(value)
+                this.handleLink(value);
             }else{
-                this.handleLink()
+                this.handleLink();
             }
         },
-        handleLink(){
+        
+        // 封装的文章请求
+        handleLink(pageIndex,pageSize,menuInfo){
+            let url = ''
+            // 当有搜索的city名字或推荐city名字传过来时
+            if(menuInfo){
+                url = `/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}&city=${menuInfo}`;
+            }else{
+                url = `/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}`;
+            }
             this.$axios({
-                url:'/posts/recommend'
+                url:url
             }).then(res=>{
-                this.post = res.data.data
-                this.total = this.post.length
-                this.postData = this.post.slice((this.pageIndex-1)*this.pageSize,this.pageSize)
-            })
-        },
-        handleSearch(menuInfo){
-            this.$axios({
-                url:`/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}&city=${menuInfo}`
-            }).then(res=>{
-                const {data} = res.data
-                this.total = res.data.total
-                this.postData = res.data.data
+                const {data} = res.data;
+                this.post  = data;
+                const {total} = res.data;
+                this.total = total;
+                this.postData = data;
+                console.log(this.post);
+                
             })
         }
     },
     watch:{
+        // 当点击推荐城市参数发生变化的时候
         menuInfo(){
-            this.handleSearch(this.menuInfo)
+            this.handleLink(this.menuInfo);
         }
     },
     mounted(){
-        this.handleLink()
+        // 默认请求第一次
+        this.handleLink(this.pageIndex,this.pageSize);
     }
 }
 </script>

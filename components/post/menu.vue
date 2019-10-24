@@ -2,7 +2,7 @@
     <!-- 菜单 -->
     <div class="menu"
     @mouseleave="current=''">
-
+        <!-- 遍历循环生成推荐城市的标题 -->
         <div class="menu-bar">
             <div class="menu-item"
             v-for="(item,index) in data"
@@ -13,7 +13,7 @@
                 <p>{{item.type}}</p><i class="el-icon-arrow-right"></i>
             </div>
         </div>
-
+        <!-- 遍历生成城市名字以及描述 -->
         <div 
         class="menu-sub" 
         v-for="(item,index) in data"
@@ -41,27 +41,32 @@
 export default {
     data(){
         return {
+            // 请求数据的集合
             data:[],
             // tab栏下标
             current:'',
+            // 给父组件传的参数
             cities:''
         }
     },
     methods:{
+        // 鼠标指向时显示的内容切换
         handleMouseOver(index){
-            this.current = index
+            this.current = index;
         },
+        // 点击城市时给父组件传参
         handleClick(cities){
-            this.cities = cities
-            this.$emit('getCities',this.cities)
+            this.cities = cities;
+            this.$emit('getCities',this.cities);
         }
     },
     mounted(){
+        // 请求数据渲染
         this.$axios({
             url:'/posts/cities'
         }).then(res=>{
-            const {data} = res.data
-            this.data = data
+            const {data} = res.data;
+            this.data = data;
         })
     }
 }

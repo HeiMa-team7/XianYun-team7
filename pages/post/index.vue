@@ -22,14 +22,15 @@ import RightContent from '@/components/post/rightContent'
 export default {
     data() {
         return {
-            cities:''
+            cities:''//接收子组件传过来的参数,默认为空
         };
     },
     components:{
-        Menu,
-        RightContent
+        Menu,//左边栏的组件名字
+        RightContent//右边栏的组件名字
     },
     methods: {
+        // 从子组件中获取推荐城市的名字
         getCities(cities){
             this.cities = cities
         }
