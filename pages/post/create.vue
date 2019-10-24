@@ -15,11 +15,6 @@
       </div>
 
       <el-form class="el_form" ref="form" :model="form" label-width="80px">
-        <!-- <el-form-item prop="city">
-          <span>选择城市</span>
-          <el-input class="input" v-model="form.city" placeholder="请搜索游玩城市"></el-input>
-        </el-form-item>-->
-
         <el-form-item>
           <span>选择城市</span>
 
@@ -47,8 +42,10 @@
       <p>草稿箱 ({{$store.state.post.draft.length}})</p>
       <div class="drafts_list" v-for="(item,index) in $store.state.post.draft" :key="index">
         <div class="title">
-          {{item.title}}
-          <i class="iconfont el-icon-edit" @click="handleEditor(index)"></i>
+          <span @click="handleEditor(index)">
+            {{item.title}}
+            <i class="iconfont el-icon-edit"></i>
+          </span>
           <button @click="handleDelete(index)" class="fr delete">删除</button>
           <el-row></el-row>
         </div>
