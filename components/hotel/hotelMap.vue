@@ -9,11 +9,12 @@
             <span>全部</span>
             <a ref="link" href="#" v-for="(item,index) in cities.scenics" :key="index">{{item.name}}</a>
           </div>
-          <p @click="isShow = !isShow">
+          <p @click="isShow = !isShow" v-if="cities.scenics">
             <i class="el-icon-caret-bottom" v-if="isShow"></i>
             <i class="el-icon-caret-top" v-else></i>
             等{{cities.scenics.length}}个区域
           </p>
+          
         </div>
       </div>
 
@@ -147,7 +148,7 @@ export default {
     justify-content: flex-start;
     color: #666;
     font-size: 14px;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     > span {
       display: block;
       width: 12.5%;
@@ -181,7 +182,9 @@ export default {
 }
 .star_level {
   display: flex;
-
+  p {
+    padding-bottom: 6px;
+  }
   >div {
     margin-right: 30px;
   }
