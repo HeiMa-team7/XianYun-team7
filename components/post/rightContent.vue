@@ -2,15 +2,16 @@
 <div class="right-content">
     <!-- 搜索栏 -->
     <div class="search-bar">
-        <input type="text" placeholder="请输入想去的地方,比如:'广州'" @keydown.enter="handleSearchCity">
-        <i class="el-icon-search"></i>
+        <input class="search-val" type="text" placeholder="请输入想去的地方,比如:'广州'" v-model="val" @keydown.enter="handleSearchCity">
+        <i class="el-icon-search" @click="searchClick"></i>
     </div>
     <!-- 推荐搜索 -->
     <div class="search-recommend">
         推荐：
-        <span>广州</span>
-        <span>上海</span>
-        <span>北京</span>
+        <span 
+        v-for="(item,index) in ['广州','上海','北京']"   
+        @click="handleRecommend(item)"
+        :key="index">{{item}}</span>
     </div>
     <!-- 标题栏 -->
     <div class="post-title">
@@ -64,7 +65,7 @@
     <div class="post-item-l"
     v-for="(item,index) in postData"
     :key="index"
-    v-if="item.images.length===1">
+    v-if="item.images.length<=1">
         <div class="post-cov">
             <nuxt-link :to="`/post/detail?id=${item.id}`">
                 <img :src="`${item.images[0]}`" alt="">
@@ -112,10 +113,11 @@ export default {
     data(){
         return{
             pageIndex:1,//分页参数
-            pageSize:1,//每页条数
+            pageSize:3,//每页条数
             post:[],//请求数据的总集合
             postData:[],//分页后数据集合
-            total:0//后台文章总数
+            total:0,//后台文章总数
+            val:'',//搜索框内容
         }
     },
     props:['menuInfo'],//从首页传过来的推荐菜单city名字
@@ -134,9 +136,10 @@ export default {
         // 当选择推荐城市或者搜索城市触发
         handleSearchCity(event){
             let value =  event.target.value ;
+            this.val = value;
             console.log(value);
             if(value){
-                this.handleLink(value);
+                this.handleLink(this.pageIndex,this.pageSize,value);
             }else{
                 this.handleLink();
             }
@@ -162,6 +165,14 @@ export default {
                 console.log(this.post);
                 
             })
+        },
+        // 点击搜索栏下面的推荐城市时触发
+        handleRecommend(item){
+            this.val = item;//点击推荐城市赋值给搜索框
+            this.handleLink(this.pageIndex,this.pageSize,item);
+        },
+        searchClick(){
+            this.handleLink(this.pageIndex,this.pageSize,this.val);
         }
     },
     watch:{
@@ -208,6 +219,10 @@ export default {
         color: #666;
         span{
             margin-right: 5px;
+            &:hover{
+                color: orange;
+                text-decoration: underline;
+            }
         }
     }
     .post-title{
