@@ -2,7 +2,7 @@
   <div class="container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/hotel' }">酒店</el-breadcrumb-item>
-      <el-breadcrumb-item>酒店预订</el-breadcrumb-item>
+      <el-breadcrumb-item>{{cities.name}}酒店预订</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 头部搜索栏 -->
