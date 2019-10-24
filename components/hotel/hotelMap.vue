@@ -109,7 +109,7 @@ export default {
   //   }
   // },
   mounted() {
-    console.log(this.cities.scenics.length);
+    // console.log(this.cities.scenics.length);
 
     window.onLoad = function() {
       var map = new AMap.Map("container");

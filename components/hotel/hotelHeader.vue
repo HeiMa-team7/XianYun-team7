@@ -126,10 +126,16 @@ export default {
     }
   },
   mounted() {
+
+    // console.log(8989898,this.$route.query.city);
+    this.form.purposeCity = this.$route.query.city
+    // console.log(12456,this.form.purposeCity);
+    
     // 默认加载南京市
     this.$axios({
-      url: "/cities?name=" + "南京市"
+      url: "/cities?name=" + this.form.purposeCity
     }).then(res => {
+      
       // data是后台返回的城市数组,没有value属性
       const { data } = res.data;
       this.cities = data[0]

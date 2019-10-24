@@ -2,11 +2,11 @@
     <div class="hotel_item">
       <!-- 左侧酒店图片 -->
       <span class="item_img">
-        <img :src="`${item.photos}`" alt />
+        <img :src="`${item.photos}`" @click="handleRouter"/>
       </span>
 
       <!-- 中间酒店介绍部分 -->
-      <div class="item_content">
+      <div class="item_content" @click="handleRouter">
         <h3>{{item.name}}</h3>
         <!-- 第二行文字 -->
         <div class="item_types">
@@ -72,6 +72,18 @@ export default {
   },
 
   methods: {
+    // 跳转到详情页面
+    handleRouter(){
+      // item.city.id能够取到城市id    item.id获取到酒店的id
+      this.$router.push({
+        path:"/hotel/hotelDetail",
+        query:{
+          city:this.item.city.id,
+          id:this.item.id
+        }
+      })
+
+    },
     handleToHotel() {
       // 直接跳转到外链，跳转外链不能用router.push
       window.location.href = "https://hotels.ctrip.com/hotel/694679.html";
