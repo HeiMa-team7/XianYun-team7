@@ -91,7 +91,7 @@ export default {
       this.$axios({
         url: "/cities?name=" + this.searchValue
       }).then(res => {
-        const { data } = res.data;
+        const { data } = res.data; 
         var cityName = data[0].name;
 
         this.$router.push({

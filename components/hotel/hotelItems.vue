@@ -1,65 +1,64 @@
 <template>
-    <div class="hotel_item">
-      <!-- 左侧酒店图片 -->
-      <span class="item_img">
-        <img :src="`${item.photos}`" @click="handleRouter"/>
-      </span>
+  <div class="hotel_item">
+    <!-- 左侧酒店图片 -->
+    <span class="item_img">
+      <img :src="`${item.photos}`" @click="handleRouter" />
+    </span>
 
-      <!-- 中间酒店介绍部分 -->
-      <div class="item_content" @click="handleRouter">
-        <h3>{{item.name}}</h3>
-        <!-- 第二行文字 -->
-        <div class="item_types">
-          <em>{{item.alias}}</em>
-          <span>
-            <i class="iconfont iconhuangguan icon_color"></i>
-            <i class="iconfont iconhuangguan icon_color"></i>
-            <i class="iconfont iconhuangguan icon_color"></i>
-          </span>
-          <span>{{item.hoteltype.name}}</span>
-        </div>
+    <!-- 中间酒店介绍部分 -->
+    <div class="item_content" @click="handleRouter">
+      <h3>{{item.name}}</h3>
+      <!-- 第二行文字 -->
+      <div class="item_types">
+        <em>{{item.alias}}</em>
+        <!-- 循环遍历出酒店皇冠等级 -->
+        <span v-if="item.hotellevel !== null">
+          <i class="iconfont iconhuangguan icon_color" v-for="index of item.hotellevel.level" :key="index"></i>
+        </span>
 
-        <div class="hotel_grade">
-          <!-- 评分 -->
-          <el-rate
-            v-model="item.stars"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}"
-          ></el-rate>
-
-          <span class="comment">{{item.all_remarks}}</span> 条评价
-          <i>97</i>篇游记
-        </div>
-        <!-- 定位地址 -->
-        <div class="item_location">
-          <i class="el-icon-location"></i>
-          位于：
-          <span>{{item.address}}</span>
-        </div>
+        <span>{{item.hoteltype.name}}</span>
       </div>
 
-      <!-- 右侧网站订购部分 -->
-      <div>
-        <div
-          class="hotel_products"
-          v-for="(item,index) in item.products"
-          :key="index"
-          @click="handleToHotel"
-        >
-          <span>{{item.name}}</span>
-          <div>
-            <span>￥{{item.price}}</span>
-            <em>
-              起
-              <i class="el-icon-arrow-right"></i>
-            </em>
-          </div>
-        </div>
-      </div>
+      <div class="hotel_grade">
+        <!-- 评分 -->
+        <el-rate
+          v-model="item.stars"
+          disabled
+          show-score
+          text-color="#ff9900"
+          score-template="{value}"
+        ></el-rate>
 
+        <span class="comment">{{item.all_remarks}}</span> 条评价
+        <i>97</i>篇游记
+      </div>
+      <!-- 定位地址 -->
+      <div class="item_location">
+        <i class="el-icon-location"></i>
+        位于：
+        <span>{{item.address}}</span>
+      </div>
     </div>
+
+    <!-- 右侧网站订购部分 -->
+    <div>
+      <div
+        class="hotel_products"
+        v-for="(item,index) in item.products"
+        :key="index"
+        @click="handleToHotel"
+      >
+        <span>{{item.name}}</span>
+        <div>
+          <span>￥{{item.price}}</span>
+          <em>
+            起
+            <i class="el-icon-arrow-right"></i>
+          </em>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -68,26 +67,28 @@ export default {
     item: {
       type: Object,
       default: {},
+      hotellevel:{
+        level:0,
+      }
     }
   },
 
   methods: {
     // 跳转到详情页面
-    handleRouter(){
+    handleRouter() {
       // item.city.id能够取到城市id    item.id获取到酒店的id
       this.$router.push({
-        path:"/hotel/hotelDetail",
-        query:{
-          city:this.item.city.id,
-          id:this.item.id
+        path: "/hotel/hotelDetail",
+        query: {
+          city: this.item.city.id,
+          id: this.item.id
         }
-      })
-
+      });
     },
     handleToHotel() {
       // 直接跳转到外链，跳转外链不能用router.push
       window.location.href = "https://hotels.ctrip.com/hotel/694679.html";
-    },
+    }
   }
 };
 </script>

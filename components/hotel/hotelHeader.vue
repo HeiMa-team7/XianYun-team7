@@ -125,22 +125,10 @@ export default {
       //   console.log(start,end);
     },
 
-    $route: {
-      handler: function(val, oldVal) {
-        if (this.$route.query.city) {
-          this.form.purposeCity = this.$route.query.city;
-        }
-      },
-      // 深度观察监听
-      deep: true
-    }
+    "$route": "getPath"
   },
-  mounted() {
-    // console.log(this.$route.query.city);
 
-    // if (this.$route.query.city) {
-    //   this.form.purposeCity = this.$route.query.city;
-    // }
+  mounted() {
 
     // 默认加载南京市
     this.$axios({
@@ -156,6 +144,26 @@ export default {
   },
 
   methods: {
+    // 监听：当路由变化的时候触发的方法：更改搜索框中的城市名
+    getPath() {
+      if (this.$route.query.city) {
+        this.form.purposeCity = this.$route.query.city;
+      }
+      // 请求城市数据
+      this.$axios({
+        url: "/cities?name=" + this.form.purposeCity
+      }).then(res => {
+        console.log(123);
+        
+        const {data} = res.data
+        this.cities = data[0];
+
+      this.$emit("handleCities", data[0]);
+      })
+      
+    },
+
+
     querySearch(value, cb) {
       // 没有输入值，不进行获取
       if (!value) {
@@ -203,9 +211,9 @@ export default {
         forms += `&city=${this.cities.id}`;
       }
 
-      if (this.form.person) {
-        forms += `&person=${this.form.person}`;
-      }
+      // if (this.form.person) {
+      //   forms += `&person=${this.form.person}`;
+      // }
       this.$emit("handleHotels", forms);
       console.log(forms);
 
