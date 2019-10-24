@@ -3,7 +3,7 @@
     <!-- 头部组件 -->
     <Header />
     <!-- 内容占位组件 -->
-    <nuxt keep-alive :keepAliveProps="{include:'post'}"/>
+    <nuxt keep-alive :keepAliveProps="{include:'post,hotel'}"/>
     <!-- 页脚组件 -->
     <Footer />
   </div>
