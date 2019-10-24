@@ -101,15 +101,9 @@ export default {
       starLevel3: 4.8
     };
   },
-  // watch:{
-  //   newScenics(){
-  //     const arr = this.cities.scenics
 
-  //     return arr
-  //   }
-  // },
   mounted() {
-    // console.log(this.cities.scenics.length);
+
 
     window.onLoad = function() {
       var map = new AMap.Map("container");

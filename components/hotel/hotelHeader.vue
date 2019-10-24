@@ -123,24 +123,34 @@ export default {
       this.form.enterTime = moment(this.scopeTime[0]).format("YYYY-MM-DD");
       this.form.leftTime = moment(this.scopeTime[1]).format("YYYY-MM-DD");
       //   console.log(start,end);
+    },
+
+    $route: {
+      handler: function(val, oldVal) {
+        if (this.$route.query.city) {
+          this.form.purposeCity = this.$route.query.city;
+        }
+      },
+      // 深度观察监听
+      deep: true
     }
   },
   mounted() {
+    // console.log(this.$route.query.city);
 
-    // console.log(8989898,this.$route.query.city);
-    this.form.purposeCity = this.$route.query.city
-    // console.log(12456,this.form.purposeCity);
-    
+    // if (this.$route.query.city) {
+    //   this.form.purposeCity = this.$route.query.city;
+    // }
+
     // 默认加载南京市
     this.$axios({
       url: "/cities?name=" + this.form.purposeCity
     }).then(res => {
-      
       // data是后台返回的城市数组,没有value属性
       const { data } = res.data;
-      this.cities = data[0]
-      console.log(789,this.cities);
-      
+      this.cities = data[0];
+      console.log(789, this.cities);
+
       this.$emit("handleCities", data[0]);
     });
   },
@@ -175,7 +185,6 @@ export default {
     // 应该发送请求，将对应的城市信息请求回来
     handleSelect(item) {
       this.cities = item;
-      // console.log(item);
       this.form.purposeCity = item.value;
       this.form.cityId = item.id;
 
@@ -184,24 +193,23 @@ export default {
 
     // 点击查看价格的时候请求，获取到城市id，入住时间，人数，请求得到符合条件的酒店信息
     handlecheck() {
+      var forms = "";
 
-      var forms = ""
-
-      if(this.form.enterTime !== "" && this.form.leftTime !== ""){
-        forms += `?enterTime=${this.form.enterTime}&leftTime=${this.form.leftTime}`
+      if (this.form.enterTime !== "" && this.form.leftTime !== "") {
+        forms += `?enterTime=${this.form.enterTime}&leftTime=${this.form.leftTime}`;
       }
 
-      if(this.cities.id){
-        forms += `&city=${this.cities.id}`
+      if (this.cities.id) {
+        forms += `&city=${this.cities.id}`;
       }
 
-      if(this.form.person){
-         forms += `&person=${this.form.person}`
+      if (this.form.person) {
+        forms += `&person=${this.form.person}`;
       }
       this.$emit("handleHotels", forms);
       console.log(forms);
-      
-      forms = ""
+
+      forms = "";
     },
 
     // 计算人数

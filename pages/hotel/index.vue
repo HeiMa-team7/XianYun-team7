@@ -2,7 +2,7 @@
   <div class="container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/hotel' }">酒店</el-breadcrumb-item>
-      <el-breadcrumb-item>酒店预订</el-breadcrumb-item>
+      <el-breadcrumb-item>{{cities.name}}酒店预订</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 头部搜索栏 -->
@@ -43,6 +43,7 @@ import hotelFilter from "@/components/hotel/hotelFilter";
 import hotelItems from "@/components/hotel/hotelItems";
 import hotelHeader from "@/components/hotel/hotelHeader";
 export default {
+  name:'hotel',
   components: {
     hotelMap,
     hotelFilter,
@@ -79,8 +80,6 @@ export default {
       this.$axios({
         url: `/hotels?city=74`
       }).then(res => {
-        // console.log(999,res);
-        
         this.hotels = res.data.data;
       });
   },
@@ -97,15 +96,12 @@ export default {
 
     // 传回搜索出的城市数据
     handleCities(cities) {
-      // console.log(666,cities);
       this.cities = cities;
     },
 
     // 传回输入条件后的请求参数,已经带上了城市id
     handleHotels(forms) {
-      console.log(123456,forms);
-      
-      // this.hotels = hotels;
+
       this.getHotels(forms);
     },
 
