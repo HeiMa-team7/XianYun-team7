@@ -13,7 +13,7 @@
             >
                 <el-row type="flex" justify="space-between" class="recommened_items">
                     <div class="item_cover">
-                        <img :src="`${item.images[0]}`" alt />
+                        <img :src="`${item.images[0]}`" alt v-if="item.images[0]" />
                     </div>
                     <div class="item_content">
                         <div class="item_title">{{item.title}}</div>
