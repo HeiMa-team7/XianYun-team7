@@ -51,7 +51,7 @@
                     <a href="/user/personal">
                         <img src="@/static/avatar.jpg" alt="">
                     </a>
-                    <a href="/user/personal">地球发动机</a>
+                    <a href="/user/personal">{{item.account.nickname}}</a>
                 </div>
                 <span class="viewed">
                     <i class="el-icon-view"></i>
@@ -66,9 +66,9 @@
     v-for="(item,index) in postData"
     :key="index"
     v-if="item.images.length<=1">
-        <div class="post-cov">
-            <nuxt-link :to="`/post/detail?id=${item.id}`">
-                <img :src="`${item.images[0]}`" alt="">
+        <div class="post-cov ">
+            <nuxt-link :to="`/post/detail?id=${item.id}`" >
+                <img :src="`${item.images[0]}`" alt="" v-if="item.images.length===1">
             </nuxt-link>
         </div>
         <div class="post-content">
@@ -82,7 +82,7 @@
                         <a href="/user/personal">
                             <img src="@/static/avatar.jpg" alt="">
                         </a>
-                        <a href="/user/personal">地球发动机</a>
+                        <a href="/user/personal">{{item.account.nickname}}</a>
                     </div>
                     <span class="viewed">
                         <i class="el-icon-view"></i>
@@ -178,7 +178,7 @@ export default {
     watch:{
         // 当点击推荐城市参数发生变化的时候
         menuInfo(){
-            this.handleLink(this.menuInfo);
+            this.handleLink(this.pageIndex,this.pageSize,this.menuInfo);
         }
     },
     mounted(){
@@ -211,6 +211,7 @@ export default {
             font-size: 24px;
             font-weight: 700;
             margin-right: 10px;
+            cursor: pointer;
         }
     }
     .search-recommend{
@@ -222,6 +223,7 @@ export default {
             &:hover{
                 color: orange;
                 text-decoration: underline;
+                cursor: pointer;
             }
         }
     }
@@ -342,6 +344,7 @@ export default {
             margin-right: 5px;
             display: inline-block;
             box-sizing: border-box;
+            border: 1px solid #ddd;
             a{
                 img{
                     width: 100%;
