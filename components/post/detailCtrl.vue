@@ -64,6 +64,7 @@ export default {
                 url: "/posts/" + id
             });
             this.like = res.data.like;
+            if(!this.$store.state.user.userInfo.token) return ;
             res.data.account.starPosts.forEach(v => {
                 if(v === id){
                     this.isStar = true;

@@ -231,7 +231,7 @@ export default {
         const { message } = res.data;
         this.$message.success(message);
         setTimeout(() => {
-          location.reload();
+          location.push("/post");
         }, 1000);
       });
     }

@@ -188,6 +188,14 @@ export default {
         },
         // 提交评论
         onSubmit() {
+            if(!this.$store.state.user.userInfo.token){
+                this.$message.error('请先登录');
+                return ;
+            }
+            if(this.pics.length === 0 && this.content === ''){
+                this.$message.error('请输入评论');
+                return ;
+            }
             // 整理提交评论的数据
             const form = {
                 content: this.content,
