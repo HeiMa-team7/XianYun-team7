@@ -30,10 +30,16 @@ export default {
         Menu,//左边栏的组件名字
         RightContent//右边栏的组件名字
     },
+    watch:{
+        $route(){
+            // location.reload();
+            this.cities = this.$route.query.city;
+        }
+    },
     methods: {
         // 从子组件中获取推荐城市的名字
         getCities(cities){
-            this.cities = cities
+            this.cities = cities;
         }
     },
     }

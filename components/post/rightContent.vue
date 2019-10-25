@@ -2,8 +2,8 @@
 <div class="right-content">
     <!-- 搜索栏 -->
     <div class="search-bar">
-        <input class="search-val" type="text" placeholder="请输入想去的地方,比如:'广州'" v-model="val" @keydown.enter="handleSearchCity">
-        <i class="el-icon-search" @click="searchClick"></i>
+        <input class="search-val" type="text" placeholder="请输入想去的地方,比如:'广州'" v-model="search" @keydown.enter="handleLink">
+        <i class="el-icon-search" @click="handleLink"></i>
     </div>
     <!-- 推荐搜索 -->
     <div class="search-recommend">
@@ -23,7 +23,7 @@
     <!-- 卡片栏 -->
     <!-- 当图片的张数大于一张时 -->
     <div class="post-item"
-    v-for="(item,index) in postData"
+    v-for="(item,index) in post"
     :key="index"
     v-if="item.images.length>1"
     >
@@ -63,7 +63,7 @@
     </div>
     <!-- 当图片只有一张的时候的卡片样式 -->
     <div class="post-item-l"
-    v-for="(item,index) in postData"
+    v-for="(item,index) in post"
     :key="index"
     v-if="item.images.length<=1">
         <div class="post-cov ">
@@ -117,7 +117,7 @@ export default {
             post:[],//请求数据的总集合
             postData:[],//分页后数据集合
             total:0,//后台文章总数
-            val:'',//搜索框内容
+            search:'',//搜索框内容
         }
     },
     props:['menuInfo'],//从首页传过来的推荐菜单city名字
@@ -126,31 +126,19 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             this.pageIndex = 1;
-            this.handleLink(this.pageIndex,this.pageSize);
+            this.handleLink();
         },
         //当切换页数时触发
         handleCurrentChange(val) {
             this.pageIndex = val;
-            this.handleLink(this.pageIndex,this.pageSize);
+            this.handleLink();
         },
-        // 当选择推荐城市或者搜索城市触发
-        handleSearchCity(event){
-            let value =  event.target.value ;
-            this.val = value;
-            console.log(value);
-            if(value){
-                this.handleLink(this.pageIndex,this.pageSize,value);
-            }else{
-                this.handleLink();
-            }
-        },
-        
         // 封装的文章请求
-        handleLink(pageIndex,pageSize,menuInfo){
+        handleLink(){
             let url = ''
             // 当有搜索的city名字或推荐city名字传过来时
-            if(menuInfo){
-                url = `/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}&city=${menuInfo}`;
+            if(this.search){
+                url = `/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}&city=${this.search}`;
             }else{
                 url = `/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}`;
             }
@@ -161,27 +149,26 @@ export default {
                 this.post  = data;
                 const {total} = res.data;
                 this.total = total;
-                this.postData = data;
-                console.log(this.post);
-                
             })
+            if(this.search === ''){
+                this.$router.push('/post');
+            }
         },
         // 点击搜索栏下面的推荐城市时触发
         handleRecommend(item){
-            this.val = item;//点击推荐城市赋值给搜索框
-            this.handleLink(this.pageIndex,this.pageSize,item);
+            this.search = item;//点击推荐城市赋值给搜索框
+            this.handleLink();
         },
-        searchClick(){
-            this.handleLink(this.pageIndex,this.pageSize,this.val);
-        }
     },
     watch:{
         // 当点击推荐城市参数发生变化的时候
         menuInfo(){
-            this.handleLink(this.pageIndex,this.pageSize,this.menuInfo);
-        }
+            this.search = this.menuInfo;
+            this.handleLink();
+        },
     },
     mounted(){
+        this.search = this.$route.query.city;
         // 默认请求第一次
         this.handleLink(this.pageIndex,this.pageSize);
     }

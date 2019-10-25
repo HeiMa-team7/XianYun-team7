@@ -57,7 +57,7 @@ export default {
         // 点击城市时给父组件传参
         handleClick(cities){
             this.cities = cities;
-            this.$emit('getCities',this.cities);
+            this.$emit('getCities',cities);
         }
     },
     mounted(){
