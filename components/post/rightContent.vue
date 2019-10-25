@@ -30,7 +30,7 @@
         <nuxt-link :to="`/post/detail?id=${item.id}`">
             <h4><nuxt-link :to="`/post/detail?id=${item.id}`">{{item.title}}</nuxt-link></h4>
         </nuxt-link>
-        <nuxt-link :to="`/post/detail?id=${item.id}`"><p v-html="`${item.content}`"></p></nuxt-link>
+        <nuxt-link :to="`/post/detail?id=${item.id}`"><p v-html="`${item.summary}`"></p></nuxt-link>
         <div class="card-img">
             <!-- 循环遍历数据下的images数组 -->
             <!-- 如果图片大于三张以上,超过三张的图片不显示 -->
@@ -73,7 +73,7 @@
         </div>
         <div class="post-content">
             <h4><nuxt-link :to="`/post/detail?id=${item.id}`">{{item.title}}</nuxt-link></h4>
-            <nuxt-link :to="`/post/detail?id=${item.id}`"><p v-html="`${item.content}`"></p></nuxt-link>
+            <nuxt-link :to="`/post/detail?id=${item.id}`"><p v-html="`${item.summary}`"></p></nuxt-link>
             <div class="post-info">
                 <div class="post-info-left">
                     <span class="location"><i class="el-icon-location-outline"></i>{{item.cityName}}</span>

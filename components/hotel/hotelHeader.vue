@@ -125,21 +125,6 @@ export default {
       //   console.log(start,end);
     },
 
-
-  //   $route( to , from ){
-  //     if(to == "/hotel"){
-  //       console.log(123);
-  //     }
-  //     to:"/hotel"
-  //     from:"/"
-      
-      
-  //   console.log( to , from )
-  //   console.log(to.query.id)
-  //   //  to , from 分别表示从哪跳转到哪，都是一个对象
-  //   // to.path   ( 表示的是要跳转到的路由的地址 eg:  /home );
-  //   // to.query.id 提取id进行http请求数据更新页面
-  // }
     $route: "getPath"
   },
 
@@ -162,6 +147,8 @@ export default {
   methods: {
     // 监听：当路由变化的时候触发的方法：更改搜索框中的城市名
     getPath() {
+      console.log(123);
+      
       // 先判断跳转后的页面是不是/hotel,不是的话则不触发这个事件
       if(this.$route.path !== "/hotel") return
       if (this.$route.query.city) {
