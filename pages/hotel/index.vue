@@ -55,7 +55,11 @@ export default {
       cities: {
         scenics: [],
         id:0,
+<<<<<<< HEAD
         name:"",
+=======
+        name:''
+>>>>>>> 76c28261d3694e05f9b0004797aa1af23dff36e7
       },
 
       // 酒店信息

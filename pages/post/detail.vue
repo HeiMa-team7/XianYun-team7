@@ -213,6 +213,9 @@ export default {
                     // 初始化评论输入框
                     this.content = "";
                     this.$refs.upload.clearFiles();
+                    this.pics = [];
+                    console.log(this.pics);
+                    
                     this.isReply = false;
                     // 刷新评论数据
                     this.getCommentsData();

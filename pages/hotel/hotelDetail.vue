@@ -57,7 +57,7 @@
             </div>
 
             <!-- 房价详情 -->
-            <div class="hotel_price">
+            <div class="hotel_price" @click="handleToHotel">
                 <div class="hotel_price_menu">
                     <span>价格来源</span>
                     <span>低价房型</span>
@@ -147,9 +147,16 @@ export default {
         }
     },
 
+    watch:{
+        $route(){
+            location.reload()
+        }
+    },
+
     mounted(){
-        const {city,id} = this.$route.query;
+        
         setTimeout(() => {
+            const {city,id} = this.$route.query;
             this.$axios({
                 url: `/hotels?city=${city}&id=${id}`
             }).then(res=>{
@@ -158,7 +165,6 @@ export default {
             const {real_city} = res.data.data[0];
             this.cityName=real_city
                 console.log(this.cityName);
-                
             })
         }, 20);
     },
@@ -179,6 +185,11 @@ export default {
         // },
         handleChange(item){
             this.item = item
+        },
+
+        handleToHotel(){
+        // 直接跳转到外链，跳转外链不能用router.push
+        window.location.href = "https://hotels.ctrip.com/hotel/694679.html";
         }
     },
 }

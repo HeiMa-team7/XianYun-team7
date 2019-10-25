@@ -9,10 +9,10 @@
             </div>
             <div class="comments_content">{{data.content}}</div>
             <el-row type="flex" class="content_img">
-                <div v-if="data.pics.length!==0">
+                <div v-if="data.pics.length!==0" v-for="(item,index) in data.pics"
+                        :key="index">
                     <img
-                        v-for="(item,index) in data.pics"
-                        :key="index"
+                        
                         :src="`${$axios.defaults.baseURL + item.url}`"
                         alt
                     />
@@ -88,6 +88,7 @@ export default {
 
         .content_img {
             div {
+                display: inline-block;
                 width: 80px;
                 height: 80px;
                 margin: 10px 5px 0 0;
