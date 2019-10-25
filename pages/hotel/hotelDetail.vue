@@ -233,17 +233,17 @@ export default {
 
         .pic-info{
             display: flex;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
 
             .big_img{
                 img{
-                    margin-right: 12px;
-                    height: 360px;
+                    margin-right: 10px;
+                    height: 350px;
                 }
             }
             .small_img{
                 img{
-                    margin-left: 10px;
+                    margin-left: 12px;
                     margin-bottom: 10px;
                 }
             }
