@@ -53,7 +53,9 @@ export default {
   data() {
     return {
       cities: {
-        scenics: []
+        scenics: [],
+        id:0,
+        name:''
       },
 
       // 酒店信息
