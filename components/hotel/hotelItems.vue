@@ -76,6 +76,8 @@ export default {
   methods: {
     // 跳转到详情页面
     handleRouter() {
+      console.log(this.item);
+      
       // item.city.id能够取到城市id    item.id获取到酒店的id
       this.$router.push({
         path: "/hotel/hotelDetail",

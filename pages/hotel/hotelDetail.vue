@@ -122,6 +122,10 @@ export default {
         Comments
     },
 
+    // watch:{
+    //     "$route":"getData"
+    // },
+
     data(){
         return {
             item: 1,
@@ -160,6 +164,19 @@ export default {
     },
 
     methods: {
+        // // 获取到路由变化
+        // getData(){
+        //     const {city,id} = this.$route.query;
+        //     this.$axios({
+        //         url: `/hotels?city=${city}&id=${id}`
+        //     }).then(res=>{
+        //     this.hotels = res.data.data[0]
+        //     const {real_city} = res.data.data[0];
+        //     this.cityName=real_city
+                
+        //     })
+        //     location.reload()
+        // },
         handleChange(item){
             this.item = item
         }

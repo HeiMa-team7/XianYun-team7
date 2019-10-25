@@ -125,6 +125,21 @@ export default {
       //   console.log(start,end);
     },
 
+
+  //   $route( to , from ){
+  //     if(to == "/hotel"){
+  //       console.log(123);
+  //     }
+  //     to:"/hotel"
+  //     from:"/"
+      
+      
+  //   console.log( to , from )
+  //   console.log(to.query.id)
+  //   //  to , from 分别表示从哪跳转到哪，都是一个对象
+  //   // to.path   ( 表示的是要跳转到的路由的地址 eg:  /home );
+  //   // to.query.id 提取id进行http请求数据更新页面
+  // }
     $route: "getPath"
   },
 
@@ -137,16 +152,18 @@ export default {
         // data是后台返回的城市数组,没有value属性
         const { data } = res.data;
         this.cities = data[0];
-        console.log(789, this.cities);
+        // console.log(789, this.cities);
 
         this.$emit("handleCities", data[0]);
       });
-    }, 20);
+    }, 100);
   },
 
   methods: {
     // 监听：当路由变化的时候触发的方法：更改搜索框中的城市名
     getPath() {
+      // 先判断跳转后的页面是不是/hotel,不是的话则不触发这个事件
+      if(this.$route.path !== "/hotel") return
       if (this.$route.query.city) {
         this.form.purposeCity = this.$route.query.city;
       }
@@ -154,7 +171,6 @@ export default {
       this.$axios({
         url: "/cities?name=" + this.form.purposeCity
       }).then(res => {
-        console.log(123);
 
         const { data } = res.data;
         this.cities = data[0];
@@ -203,11 +219,11 @@ export default {
       var forms = "?";
 
       if (this.form.enterTime !== "" && this.form.leftTime !== "") {
-        forms += `?enterTime=${this.form.enterTime}&leftTime=${this.form.leftTime}`;
+        forms += `enterTime=${this.form.enterTime}&leftTime=${this.form.leftTime}&`;
       }
 
       if (this.cities.id) {
-        forms += `&city=${this.cities.id}`;
+        forms += `city=${this.cities.id}`;
       }
 
       // if (this.form.person) {
@@ -216,7 +232,6 @@ export default {
       this.$emit("handleHotels", forms);
       console.log(forms);
 
-      forms = "";
     },
 
     // 计算人数

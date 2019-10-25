@@ -52,7 +52,7 @@ export default {
         {
           name: "酒店",
           placeholder: "请输入城市搜索酒店",
-          pageUrl: "/hotel?hotel="
+          pageUrl: "/hotel"
         },
         {
           name: "机票",

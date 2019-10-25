@@ -53,7 +53,9 @@ export default {
   data() {
     return {
       cities: {
-        scenics: []
+        scenics: [],
+        id:0,
+        name:"",
       },
 
       // 酒店信息
@@ -73,16 +75,15 @@ export default {
     }
   },
 
-  mounted() {
+  // mounted() {
 
-
-    // 请求酒店数据
-      this.$axios({
-        url: `/hotels?city=74`
-      }).then(res => {
-        this.hotels = res.data.data;
-      });
-  },
+  //   // 请求酒店数据
+  //     this.$axios({
+  //       url: `/hotels?city=74`
+  //     }).then(res => {
+  //       this.hotels = res.data.data;
+  //     });
+  // },
 
   methods: {
     // 请求酒店数据
