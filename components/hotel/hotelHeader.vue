@@ -125,22 +125,23 @@ export default {
       //   console.log(start,end);
     },
 
-    "$route": "getPath"
+    $route: "getPath"
   },
 
   mounted() {
+    setTimeout(() => {
+      // 默认加载南京市
+      this.$axios({
+        url: "/cities?name=" + this.form.purposeCity
+      }).then(res => {
+        // data是后台返回的城市数组,没有value属性
+        const { data } = res.data;
+        this.cities = data[0];
+        console.log(789, this.cities);
 
-    // 默认加载南京市
-    this.$axios({
-      url: "/cities?name=" + this.form.purposeCity
-    }).then(res => {
-      // data是后台返回的城市数组,没有value属性
-      const { data } = res.data;
-      this.cities = data[0];
-      console.log(789, this.cities);
-
-      this.$emit("handleCities", data[0]);
-    });
+        this.$emit("handleCities", data[0]);
+      });
+    }, 20);
   },
 
   methods: {
@@ -154,15 +155,13 @@ export default {
         url: "/cities?name=" + this.form.purposeCity
       }).then(res => {
         console.log(123);
-        
-        const {data} = res.data
+
+        const { data } = res.data;
         this.cities = data[0];
 
-      this.$emit("handleCities", data[0]);
-      })
-      
+        this.$emit("handleCities", data[0]);
+      });
     },
-
 
     querySearch(value, cb) {
       // 没有输入值，不进行获取
@@ -201,7 +200,7 @@ export default {
 
     // 点击查看价格的时候请求，获取到城市id，入住时间，人数，请求得到符合条件的酒店信息
     handlecheck() {
-      var forms = "";
+      var forms = "?";
 
       if (this.form.enterTime !== "" && this.form.leftTime !== "") {
         forms += `?enterTime=${this.form.enterTime}&leftTime=${this.form.leftTime}`;

@@ -14,7 +14,6 @@
             <i class="el-icon-caret-top" v-else></i>
             等{{cities.scenics.length}}个区域
           </p>
-          
         </div>
       </div>
 
@@ -103,10 +102,12 @@ export default {
   },
 
   mounted() {
-
-
     window.onLoad = function() {
-      var map = new AMap.Map("container");
+      var map = new AMap.Map("container", {
+        zoom: 11, //级别
+        center: [118.796623, 32.059352], //中心点坐标
+        viewMode: "3D" //使用3D视图
+      });
     };
     var url =
       "https://webapi.amap.com/maps?v=1.4.15&key=c127bcd25b82c75da5363edad22572ed&callback=onLoad";
@@ -174,12 +175,13 @@ export default {
     }
   }
 }
+
 .star_level {
   display: flex;
   p {
     padding-bottom: 6px;
   }
-  >div {
+  > div {
     margin-right: 30px;
   }
 }
@@ -202,6 +204,7 @@ export default {
 /deep/el-rate {
   width: 100px;
 }
+
 .map {
   width: 40%;
   padding-left: 6px;
