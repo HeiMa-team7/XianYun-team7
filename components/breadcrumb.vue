@@ -32,6 +32,9 @@ export default {
             }
         };
     },
+    mounted(){
+        this.router = this.router_data;
+    }
 };
 </script>
 

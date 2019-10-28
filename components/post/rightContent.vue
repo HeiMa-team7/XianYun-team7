@@ -115,7 +115,6 @@ export default {
             pageIndex:1,//分页参数
             pageSize:3,//每页条数
             post:[],//请求数据的总集合
-            postData:[],//分页后数据集合
             total:0,//后台文章总数
             search:'',//搜索框内容
         }
@@ -136,6 +135,7 @@ export default {
         // 封装的文章请求
         handleLink(){
             let url = ''
+            console.log();
             // 当有搜索的city名字或推荐city名字传过来时
             if(this.search){
                 url = `/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}&city=${this.search}`;
@@ -156,6 +156,7 @@ export default {
         },
         // 点击搜索栏下面的推荐城市时触发
         handleRecommend(item){
+            this.pageIndex = 1;
             this.search = item;//点击推荐城市赋值给搜索框
             this.handleLink();
         },
@@ -163,6 +164,7 @@ export default {
     watch:{
         // 当点击推荐城市参数发生变化的时候
         menuInfo(){
+            this.pageIndex = 1;
             this.search = this.menuInfo;
             this.handleLink();
         },
@@ -170,7 +172,7 @@ export default {
     mounted(){
         this.search = this.$route.query.city;
         // 默认请求第一次
-        this.handleLink(this.pageIndex,this.pageSize);
+        this.handleLink();
     }
 }
 </script>
