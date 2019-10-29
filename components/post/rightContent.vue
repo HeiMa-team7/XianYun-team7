@@ -135,7 +135,14 @@ export default {
         // 封装的文章请求
         handleLink(){
             let url = ''
-            console.log();
+            // console.log();
+            if(!this.search){
+                this.$router.push('/post');
+            }else{
+                this.$router.push({
+                    query:({},{'city':`${this.search}`})
+                })
+            }
             // 当有搜索的city名字或推荐city名字传过来时
             if(this.search){
                 url = `/posts?_start=${(this.pageIndex-1)*this.pageSize}&_limit=${this.pageSize}&city=${this.search}`;
@@ -150,9 +157,6 @@ export default {
                 const {total} = res.data;
                 this.total = total;
             })
-            if(this.search === ''){
-                this.$router.push('/post');
-            }
         },
         // 点击搜索栏下面的推荐城市时触发
         handleRecommend(item){

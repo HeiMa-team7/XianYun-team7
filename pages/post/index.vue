@@ -31,9 +31,9 @@ export default {
         RightContent//右边栏的组件名字
     },
     watch:{
-        $route(){
+        "$route.query.city"(val) {
             // location.reload();
-            this.cities = this.$route.query.city;
+            this.cities = val;
         }
     },
     methods: {
